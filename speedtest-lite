@@ -100,6 +100,12 @@ cleanup () {
   rm -f $rawspeed
   rm -f $uldata
   rm -f $ulallspeed
+
+  if [ $normal -eq 1 ]; then
+    exit 0
+  else
+    exit 1
+  fi
 }
 
 trap "normal=0; cleanup; exit" HUP INT TERM
@@ -111,7 +117,13 @@ info () {
 }
 
 getConfigFile () {
-  $PROG_CURL $CURL_OPTS "${SPEEDTEST_CONFIG}" -o $config >/dev/null 2>&1
+  response_code=$($PROG_CURL $CURL_OPTS -sw '%{http_code}' "${SPEEDTEST_CONFIG}" -o $config)
+
+  if [ "x$response_code" != "x200" ]; then
+    echo "ERROR: Could not get client configuration!!!"
+    normal=0
+    cleanup
+  fi
 
   client_conf=$(getConfig client)
 }
@@ -174,7 +186,13 @@ fetchClosestServers () {
 
   test -f $closest_cache && return
 
-  $PROG_CURL $CURL_OPTS "${SPEEDTEST_SERVERS}" -o ${servers} >/dev/null 2>&1
+  response_code=$($PROG_CURL $CURL_OPTS -sw '%{http_code}' "${SPEEDTEST_SERVERS}" -o ${servers})
+
+  if [ "x$response_code" != "x200" ]; then
+    echo "ERROR: Could not get servers list!!!"
+    normal=0
+    cleanup
+  fi
 
   clat=$(getValue "${client_conf}" lat)
   clon=$(getValue "${client_conf}" lon)
