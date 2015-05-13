@@ -30,7 +30,6 @@ PROG_DATE=$(which date)
 PROG_CURL=$(which curl)
 PROG_NC=$(which nc)
 PROG_PV=$(which pv)
-PROG_FOLD=$(which fold)
 PROG_BC=$(which bc)
 PROG_SPARK=$(which spark)
 
@@ -45,12 +44,11 @@ test -n "${PROG_CURL}" || warn_required_tool "curl"
 test -n "${PROG_NC}" || warn_required_tool "netcat (nc)"
 test -n "${PROG_PV}" || warn_required_tool "pipe viewer (pv)"
 test -n "${PROG_BC}" || warn_required_tool "arbitrary precision calculator language (bc)"
-test -n "${PROG_FOLD}" || warn_required_tool "fold"
 
 # Workaround if tempfile does not exists, eg. OpenWRT
 if [ "x$PROG_TEMPFILE" = "x" ]; then
 tempfile () {
-  file="/tmp/$(cat /dev/urandom | tr -dc 'a-z0-9' | $PROG_FOLD -w 16 | head -n1)"
+  file="/tmp/$(tr -dc 'a-z0-9' </dev/urandom | head -c16)"
   touch $file
   echo $file
 }
@@ -347,7 +345,7 @@ download_test () {
 
 upload_test () {
   url=$1
-  data10k=$(cat /dev/urandom | tr -dc 'A-Z0-9' | $PROG_FOLD -w 10000 | head -n1)
+  data10k=$(tr -dc 'A-Z0-9' </dev/urandom | head -c10000)
   period=10
 
   title="Testing upload speed"
