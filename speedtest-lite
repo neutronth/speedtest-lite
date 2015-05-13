@@ -340,7 +340,7 @@ download_test () {
   test -z $speed && speed=0
   dlspeed=$(echo "scale=2; (${speed}*8.388608)/1000" | bc -l)
 
-  printf "Download: %s Mbit/s\n" "$dlspeed"
+  printf "Download: %0.2f Mbit/s\n" $dlspeed
 }
 
 upload_test () {
@@ -375,8 +375,9 @@ upload_test () {
   done
 
   speed=$(cat ${ulallspeed} | awk '{sum += $1 } END { if (NR > 0) printf "%0.2f", sum / NR / 1000 /1000 }')
+  test -z $speed && speed=0
 
-  printf "Upload: %s Mbit/s\n" "${speed}"
+  printf "Upload: %0.2f Mbit/s\n" ${speed}
 }
 
 speedtest () {
