@@ -50,7 +50,7 @@ Upload: 3.28 Mbit/s
 
 * Less verbose test
 ```
-$ ./speedtest-lite
+$ ./speedtest-lite --simple
 
 Ping: 20.40 ms
 Download: 43.20 Mbit/s
