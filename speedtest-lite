@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright 2015 Neutron Soutmun
+# Copyright 2015-2017 Neutron Soutmun
 # All Rights Reserved.
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -18,12 +18,13 @@
 #   https://github.com/sivel/speedtest-cli
 
 PROGRAMNAME="Speedtest-Lite"
-VERSION="0.1.0"
+VERSION="0.2.0"
 AGENT="$PROGRAMNAME/$VERSION"
 
 SPEEDTEST_CONFIG="https://www.speedtest.net/speedtest-config.php"
 SPEEDTEST_SERVERS="https://www.speedtest.net/speedtest-servers-static.php"
 CURL_OPTS="--connect-timeout 10 --user-agent \"$AGENT\""
+NC_OPTS=""
 
 PROG_TEMPFILE=$(which tempfile)
 PROG_DATE=$(which date)
@@ -74,9 +75,14 @@ flag_simple=0
 serverid=""
 country=""
 client_conf=""
+source=""
 normal=1
 
 init () {
+  if [ "x$source" != "x" ]; then
+    info "The testing will originate from $source ...\n"
+  fi
+
   info "Retrieving speedtest.net configuration...\n"
   getConfigFile
 
@@ -323,7 +329,7 @@ download_test () {
   info "$title"
 
   echo "DOWNLOAD ${test_filesize}" | \
-    $PROG_NC ${test_server} ${test_port} 2>/dev/null | \
+    $PROG_NC $NC_OPTS ${test_server} ${test_port} 2>/dev/null | \
     $PROG_PV -a -f >/dev/null 2>${rawspeed} &
 
   n=$period
@@ -489,6 +495,12 @@ while [ "x$1" != "x" ]; do
       country=$value
       closest_cache="${closest_cache}.${country}"
       closest_list="${closest_list}.${country}"
+      ;;
+    --source)
+      test -n "$value" || shift; value=$1
+      source=$value
+      CURL_OPTS="${CURL_OPTS} --interface ${source}"
+      NC_OPTS="${NC_OPTS} -s ${source}"
       ;;
     --version)
       printf "%s %s\n" "$PROGRAMNAME" "$VERSION"

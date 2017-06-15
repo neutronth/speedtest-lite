@@ -30,6 +30,8 @@ optional arguments:
                         servers, eg. TH, JP, US
   --insecure            Allow connections to speedtest.net SSL with no 
                         certificate check
+  --source ADDRESS      bind the testing connections to ADDRESS
+                        the testing will originate from this ADDRESS
   --version             show the version number and exit
 ```
 
@@ -102,6 +104,26 @@ Testing download speed..........
 Download: 40.88 Mbit/s
 Testing upload speed.......................
 Upload: 3.24 Mbit/s
+```
+
+* Test with source IP address binding
+
+  The multiple uplinks environment, each link could be tested by specify
+  the link IP address as source IP address.
+
+```
+$ ./speedtest-lite --source 192.168.1.191
+
+The testing will originate from 192.168.1.191 ...
+Retrieving speedtest.net configuration...
+Retrieving speedtest.net server list...
+Testing from 3BB (183.88.56.xxx)...
+Selecting best server based on latency...
+Hosted by AIS (Bangkok) [1.21 km]: 12.26 ms
+Testing download speed..........
+Download: 63.82 Mbit/s
+Testing upload speed.......................
+Upload: 14.61 Mbit/s
 ```
 
 * Test and show simple speed histogram
