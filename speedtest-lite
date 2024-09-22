@@ -25,7 +25,7 @@ SPEEDTEST_SERVERS="https://www.speedtest.net/speedtest-servers-static.php"
 CURL_OPTS="--connect-timeout 10"
 NC_OPTS=""
 
-PROG_TEMPFILE=$(which tempfile)
+PROG_MKTEMP=$(which mktemp)
 PROG_DATE=$(which date)
 PROG_CURL=$(which curl)
 PROG_NC=$(which nc)
@@ -45,9 +45,9 @@ test -n "${PROG_NC}" || warn_required_tool "netcat (nc)"
 test -n "${PROG_PV}" || warn_required_tool "pipe viewer (pv)"
 test -n "${PROG_BC}" || warn_required_tool "arbitrary precision calculator language (bc)"
 
-# Workaround if tempfile does not exists, eg. OpenWRT
-if [ "x$PROG_TEMPFILE" = "x" ]; then
-tempfile () {
+# Workaround if mktemp does not exists, eg. OpenWRT
+if [ "x$PROG_MKTEMP" = "x" ]; then
+mktemp () {
   file="/tmp/$(tr -dc 'a-z0-9' </dev/urandom | head -c16)"
   touch $file
   echo $file
@@ -57,16 +57,16 @@ fi
 closest_cachedir=~/.speedtest-lite
 closest_cache=$closest_cachedir/closest.cache
 closest_list=$closest_cachedir/closest.list
-config=`tempfile`
-servers=`tempfile`
-filterservers=`tempfile`
-closest=`tempfile`
-bestlatency=`tempfile`
-latency=`tempfile`
-rawspeed=`tempfile`
-histogram=`tempfile`
-uldata=`tempfile`
-ulallspeed=`tempfile`
+config=`mktemp`
+servers=`mktemp`
+filterservers=`mktemp`
+closest=`mktemp`
+bestlatency=`mktemp`
+latency=`mktemp`
+rawspeed=`mktemp`
+histogram=`mktemp`
+uldata=`mktemp`
+ulallspeed=`mktemp`
 
 test -d $closest_cachedir || mkdir -p $closest_cachedir
 
