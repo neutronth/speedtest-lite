@@ -19,11 +19,10 @@
 
 PROGRAMNAME="Speedtest-Lite"
 VERSION="0.2.0"
-AGENT="$PROGRAMNAME/$VERSION"
 
 SPEEDTEST_CONFIG="https://www.speedtest.net/speedtest-config.php"
 SPEEDTEST_SERVERS="https://www.speedtest.net/speedtest-servers-static.php"
-CURL_OPTS="--connect-timeout 10 --user-agent \"$AGENT\""
+CURL_OPTS="--connect-timeout 10"
 NC_OPTS=""
 
 PROG_TEMPFILE=$(which tempfile)
