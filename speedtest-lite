@@ -18,7 +18,7 @@
 #   https://github.com/sivel/speedtest-cli
 
 PROGRAMNAME="Speedtest-Lite"
-VERSION="0.2.0"
+VERSION="0.3.0"
 
 SPEEDTEST_CONFIG="https://www.speedtest.net/speedtest-config.php"
 SPEEDTEST_SERVERS="https://www.speedtest.net/speedtest-servers-static.php"
